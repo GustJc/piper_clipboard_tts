@@ -40,9 +40,7 @@ class MainVoiceWindow():
     combo_box = None
     combo_box_2 = None
     text_widget = None
-    selected_voice_id = 2
     clipboard_copy = None
-    clipboard_play = None
 
     label_str = None
 
@@ -66,7 +64,7 @@ class MainVoiceWindow():
 
         self.on_voice_selected(0)
 
-        # check
+        # Check CHECK_CLIPBOARD
         self.clipboard_copy = tk.BooleanVar()
         self.clipboard_copy.set(False)
         # Create the check box widget and associate it with the check_var variable and check_callback function
@@ -74,15 +72,10 @@ class MainVoiceWindow():
         check_box.pack()
         self.check_callback()
 
-        self.clipboard_play = tk.BooleanVar()
-        self.clipboard_play.set(True)
-        check_box = tk.Checkbutton(self.window, text="Auto play", variable=self.clipboard_play, command=self.check_callback_play)
-        check_box.pack()
-
         # Label
         # Create a label above the combobox and text widget
         self.label_str = tk.StringVar()
-        self.label_str.set(f'Japanese text (voice id ={self.selected_voice_id})')
+        self.label_str.set(f'Speech text:')
         label = tk.Label(self.window, textvariable=self.label_str)
         label.pack()
 
@@ -101,7 +94,7 @@ class MainVoiceWindow():
         # Shortcuts
 
         keyboard.add_hotkey('win+z', self.create_voice_from_text)
-        keyboard.add_hotkey('win+c', self.switch_auto_play)
+        keyboard.add_hotkey('win+c', self.switch_clipboard_play)
 
 
         # Start the tkinter event loop
@@ -118,19 +111,14 @@ class MainVoiceWindow():
         clipboard_piper.CHECK_CLIPBOARD = self.clipboard_copy.get()
         print("Check box clip:", self.clipboard_copy.get())
 
-    def check_callback_play(self):
-        clipboard_piper.CLIPBOARD_AUTO_PLAY = self.clipboard_play.get()
-        print("Check box play:", self.clipboard_play.get())
-
-    def switch_auto_play(self):
-        self.clipboard_play.set(not self.clipboard_play.get())
-        self.check_callback_play()
+    def switch_clipboard_play(self):
+        self.clipboard_copy.set(not self.clipboard_copy.get())
+        self.check_callback()
 
     def create_voice_from_text(self):
         sentence = self.text_widget.get('1.0', tk.END)
         print('Sending: ' + sentence)
         clipboard_piper.check_new_text_and_play_voice(True, sentence)
-
 
     def on_voice_selected(self, event):
         selected_option = self.combo_box.get()
@@ -154,6 +142,6 @@ class MainVoiceWindow():
 if __name__ == '__main__':
     print("Starting...")
     print("win+z to play voice. (button hotkey)")
-    print("win+c to switch auto-play checkbox")
+    print("win+c to switch auto-play clipboard checkbox")
     #create_tkinter_window()
     MainVoiceWindow()

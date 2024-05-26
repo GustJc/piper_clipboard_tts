@@ -14,7 +14,7 @@ import sys, os
 import subprocess
 
 
-PIPER_BIN = 'F:\Programas\Piper TTS\piper\piper.exe'
+PIPER_BIN = getenv('PIPER_BIN', 'F:\Programas\Piper TTS\piper\piper.exe')
 PIPER_PATH = Path(PIPER_BIN).resolve().parent
 
 EXIT_PROGRAM = False
@@ -60,14 +60,10 @@ def switch_wav_file():
 
     if IS_FIRST_WAV:
         WAV_FILE = WAV_PATH / WAVE_FILENAME_1
-        print("Changing 1")
     else:
         WAV_FILE = WAV_PATH / WAVE_FILENAME_2
-        print("Changing 2")
 
     IS_FIRST_WAV = not IS_FIRST_WAV
-    
-    print(WAV_FILE)
 
 def play_voice():
     global WAV_FILE
@@ -119,16 +115,6 @@ def check_new_text_and_play_voice(not_from_clipboard = False, sentence = None):
         # Replay last voice if from UI
         print("Replaying voice if the same")
         play_voice()
-
-
-def check_if_japanese(sentence):
-    try:
-        return any(
-            unicodedata.name(c).startswith("HIRAGANA") or
-            unicodedata.name(c).startswith("KATAKANA") or
-            unicodedata.name(c).startswith("CJK UNIFIED") for c in sentence)
-    except ValueError:
-        return False
 
 def stop_voice_play():
     print("Killing voice.")
