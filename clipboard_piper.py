@@ -41,7 +41,7 @@ def speak_voice(sentence, play_new_voice=True):
     
     cmd = r'echo "{}" | "{}" --model "{}" --output_file "{}"' \
         .format(sentence.replace('\n', ' '), PIPER_BIN, PIPER_PATH / VOICE_ID, WAV_FILE)
-    print("Command: {}".format(cmd))
+    #print("Command: {}".format(cmd))
     ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     ps.communicate()
 
